@@ -1,0 +1,76 @@
+spring:
+  application:
+    name: bnb-employee-service
+  profiles: default
+
+  cloud:
+    openfeign:
+      client:
+        config:
+          childrenClient:
+            url: ${CHILDREN_SERVICE_URL:http://child-service:8081}
+
+server:
+  port: ${SERVER_PORT:8080}
+
+management:
+  endpoints:
+    enabled-by-default: false
+    web:
+      discovery:
+        enabled: false
+      exposure:
+        include: "*"
+  endpoint:
+    health:
+      enabled: true
+      show-details: always
+      probes:
+        enabled: true
+    customendpoint:
+      enabled: true
+    prometheus:
+      enabled: true
+  metrics:
+    tags:
+      application: ${spring.application.name}
+    distribution:
+      percentiles-histogram:
+        http.server.requests: true
+
+  datasource:
+    url: jdbc:h2:mem:testdb
+    driverClassName: org.h2.Driver
+    username: sa
+    password: password
+  jpa:
+    database-platform: org.hibernate.dialect.H2Dialect
+    show-sql: true
+    format-sql: true
+  h2:
+    console:
+      enabled: true
+  flyway:
+    enabled: true
+
+logging: &logging
+# Defina aqui as configurações de logging que deseja reutilizar
+
+employee-service:
+  build: ./employee-service/
+  container_name: employee-service
+  volumes:
+    - ./opentelemetry-javaagent.jar:/etc/opentelemetry-javaagent.jar
+  ports:
+    - "8080:8080"
+  environment:
+    - OTEL_METRICS_EXPORTER=none
+    - OTEL_LOGS_EXPORTER=otlp
+    - OTEL_EXPORTER_OTLP_ENDPOINT=http://collector:4317
+    - OTEL_EXPORTER_OTLP_INSECURE=true
+    - OTEL_RESOURCE_ATTRIBUTES=service.name=bnb-employee-service
+    - JSON_LOGS_ENABLED=true
+    - JDK_JAVA_OPTIONS=-javaagent:/etc/opentelemetry-javaagent.jar
+  depends_on:
+    - collector
+  logging: *logging

@@ -32,6 +32,7 @@ public class EmployeeService {
     }
 
     public List<Employee> findPagedEmployees(int page) {
+        logger.info("findPagedEmployees");
         PageRequest pageRequest = PageRequest.of(page, EMPLOYEE_PAGE_SIZE, Sort.by("name").ascending());
         List<Employee> employees = employeeRepository.findAll(pageRequest).getContent();
         return employees.stream().map(this::enrichEmployee).collect(Collectors.toUnmodifiableList());

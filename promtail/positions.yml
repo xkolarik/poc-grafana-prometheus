@@ -1,0 +1,4 @@
+- file: /var/log/syslog
+  offset: 12345
+- file: /var/log/messages
+  offset: 67890

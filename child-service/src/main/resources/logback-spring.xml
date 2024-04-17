@@ -31,10 +31,18 @@
         </encoder>
     </appender>
 
+    <appender name="FILE" class="ch.qos.logback.core.FileAppender">
+        <file>/var/log/logs/child.log</file>
+        <encoder>
+            <pattern>%d{yyyy-MM-dd HH:mm:ss.SSS} [%thread] %-5level %logger{36} - %msg%n</pattern>
+        </encoder>
+    </appender>
+
     <root level="INFO">
         <if condition='isDefined("JSON_LOGS_ENABLED")'>
             <then>
                 <appender-ref ref="STDOUT_JSON"/>
+                <appender-ref ref="FILE" />
             </then>
             <else>
                 <appender-ref ref="STDOUT"/>
@@ -44,6 +52,30 @@
 
     <!-- LOG "br.gov.bnb.*" at DEBUG level -->
     <logger name="br.gov.bnb" level="DEBUG" additivity="false">
+        <if condition='isDefined("JSON_LOGS_ENABLED")'>
+            <then>
+                <appender-ref ref="STDOUT_JSON"/>
+            </then>
+            <else>
+                <appender-ref ref="STDOUT"/>
+            </else>
+        </if>
+    </logger>
+
+    <!-- LOG "org.hibernate.SQL" at DEBUG level -->
+    <logger name="org.hibernate.SQL" level="DEBUG" additivity="false">
+        <if condition='isDefined("JSON_LOGS_ENABLED")'>
+            <then>
+                <appender-ref ref="STDOUT_JSON"/>
+            </then>
+            <else>
+                <appender-ref ref="STDOUT"/>
+            </else>
+        </if>
+    </logger>
+
+    <!-- LOG "org.hibernate.type.descriptor.sql.BasicBinder" at TRACE level -->
+    <logger name="org.hibernate.type.descriptor.sql.BasicBinder" level="TRACE" additivity="false">
         <if condition='isDefined("JSON_LOGS_ENABLED")'>
             <then>
                 <appender-ref ref="STDOUT_JSON"/>

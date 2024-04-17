@@ -1,0 +1,57 @@
+spring:
+  application:
+    name: bnb-children-service
+  profiles: default
+
+server:
+  port: ${SERVER_PORT:8081}
+  tomcat:
+    max-connections: 20
+    threads:
+      max: 5
+
+management:
+  endpoints:
+    enabled-by-default: false
+    web:
+      discovery:
+        enabled: false
+      exposure:
+        include: health, prometheus
+  endpoint:
+    health:
+      enabled: true
+      show-details: always
+      probes:
+        enabled: true
+    prometheus:
+      enabled: true
+  metrics:
+    tags:
+      application: ${spring.application.name}
+    distribution:
+      percentiles-histogram:
+        http.server.requests: true
+
+logging: &logging
+# Defina aqui as configurações de logging que deseja reutilizar
+
+child-service:
+  build: ./child-service/
+  container_name: child-service
+  volumes:
+    - ./opentelemetry-javaagent.jar:/etc/opentelemetry-javaagent.jar
+  ports:
+    - "8081:8081"
+  environment:
+    - OTEL_METRICS_EXPORTER=none
+    - OTEL_LOGS_EXPORTER=otlp
+    - OTEL_EXPORTER_OTLP_ENDPOINT=http://collector:4317
+    - OTEL_EXPORTER_OTLP_INSECURE=true
+    - OTEL_RESOURCE_ATTRIBUTES=service.name=bnb-children-service
+    - JSON_LOGS_ENABLED=false
+    - SERVER_PORT=8081
+    - JDK_JAVA_OPTIONS=-javaagent:/etc/opentelemetry-javaagent.jar
+  depends_on:
+    - collector
+  logging: *logging

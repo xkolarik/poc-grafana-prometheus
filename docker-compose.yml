@@ -31,7 +31,7 @@ services:
     container_name: collector
     command: [ "--config=/etc/otel-config.yml" ]
     volumes:
-      - ./otel-config.yaml:/etc/otel-config.yml
+      - ./otel-config.yml:/etc/otel-config.yml
     ports:
       - "4317" # OTLP over gRPC receiver
       - "4318:4318" # OTLP over HTTP receiver
@@ -67,4 +67,17 @@ services:
     container_name: loki
     ports:
       - "3100:3100"
+    logging: *logging
+
+  # Promtail
+  promtail:
+    image: grafana/promtail:2.8.0
+    container_name: promtail
+    volumes:
+      - ./promtail/promtail.yml:/etc/promtail.yml
+      - C:/var/log/logs:/var/log # Mount the host's log directory into the container
+    ports:
+      - "9080:9080" # HTTP port for Promtail
+    depends_on:
+      - loki
     logging: *logging
