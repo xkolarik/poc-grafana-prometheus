@@ -38,8 +38,7 @@ $ cd ..
 OBS: Adicionar as Bibliotecas no POM.xml
 
 ```bash
-    #    Dependência para integrar o Micrometer com o Prometheus, permitindo a exposição de métricas do Micrometer para monitoramento através do Prometheus.
-    -->
+    #Dependência para integrar o Micrometer com o Prometheus, permitindo a exposição de métricas do Micrometer para monitoramento através do Prometheus.
         <dependency>
 			<groupId>io.micrometer</groupId>
 			<artifactId>micrometer-registry-prometheus</artifactId>
