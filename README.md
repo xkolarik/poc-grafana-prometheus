@@ -10,7 +10,7 @@ Descrição dos componentes:
 * **OTel Agent**: Agente que roda juntamente com os serviços acima para coletar dados de temeletria e enviar ao coletor.
 * **OTel Collector**: Coletor de dados do Open Telemetry de métricas, logs e traces a partir dos serviços descritos acima.
 * **Grafana Loki**, Promtail**: Serviço backend responsável por armazenar dados de logs.
-* **Grafana Prometheus**: Serviço backend responsável por armazenar dados de métricas.
+* **Grafana Prometheus**: Serviço backend responsável por armazenar dados de métricas, (CPU, Memória, Largura de banda, etc.) e as envia para o grafana.
 * **Jaeger**: Serviço backend responsável por armazenar dados de tracing.
 * **Grafana**: UI utilizada para realizar consultas e agregações nos dados dos serviços de tracing, logs e métricas.
 
