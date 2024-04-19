@@ -35,6 +35,25 @@ $ cd ./child-service
 $ mvn clean package install
 $ cd ..
 ```
+OBS: Adicionar as Bibliotecas no POM.xml
+
+```bash
+    #    Dependência para integrar o Micrometer com o Prometheus, permitindo a exposição de métricas do Micrometer para monitoramento através do Prometheus.
+    -->
+        <dependency>
+			<groupId>io.micrometer</groupId>
+			<artifactId>micrometer-registry-prometheus</artifactId>
+			<version>${micrometer-prometheus.version}</version>
+		</dependency>
+
+    #API do OpenTelemetry, uma estrutura para instrumentação de código e geração de telemetria para monitoramento e observabilidade de aplicativos distribuídos.
+		<dependency>
+			<groupId>io.opentelemetry</groupId>
+			<artifactId>opentelemetry-api</artifactId>
+			<version>${otel-api.version}</version>
+		</dependency>
+```
+
 
 Os comandos devem mostrar que executaram com sucesso e devem gerar dentro da pasta `./target/` de cada serviço o jar correspondente.
 
