@@ -1,4 +1,4 @@
-# POC de Spring-Boot com Open Telemetry
+# POC de Observabilidade Grafana [Metricas, Logs e Traces]
 
 ## Arquitetura da Aplicação
 
